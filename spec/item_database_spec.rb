@@ -15,5 +15,13 @@ RSpec.describe(ItemDatabase) do
         expect(search_item).to eq(nil)
       end
     end
+    describe '#load' do
+      it 'returns items hash' do
+        json = '[{"name":"Apple", "price":100}]'
+        db = ItemDatabase.load(json)
+        expect(db.search('Apple').name).to eq 'Apple'
+        expect(db.search('Apple').price).to eq 100
+      end
+    end
   end
 end
