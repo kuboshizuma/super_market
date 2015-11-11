@@ -1,3 +1,5 @@
+require 'json'
+
 class Item
   attr_accessor :name, :price
 
@@ -9,7 +11,7 @@ end
 
 class Cart
   def initialize
-    @items = Array.new
+    @items = []
   end
 
   def add_item(item)
@@ -22,15 +24,26 @@ class Cart
 end
 
 class ItemDatabase
+  attr_accessor :items
   def initialize
-    @items = Array.new
+    @items = {}
   end
 
   def register(item)
-    @items << item
+    @items[item.name] = item
   end
 
   def search(item_name)
-    @items.find { |item| item.name == item_name }
+    @items[item_name]
   end
+
+  def self.load(json)
+    db = new
+    array = JSON.parse(json)
+    array.each do |item|
+      db.register(Item.new(item["name"], item["price"]))
+    end
+    db
+  end
+
 end
